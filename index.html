@@ -6,7 +6,6 @@
 <title>🏆 BEY LEAGUE</title>
 <link rel="icon" href="data:,">
 <meta name="apple-mobile-web-app-capable" content="yes">
-
 <style>
 body{
   font-family:sans-serif;
@@ -35,16 +34,25 @@ th,td{
   text-align:center;
   font-size:20px;
 }
-td.disabled{background:#f2f4f8;color:#bbb;}
+td.disabled{
+  background:#f2f4f8;
+  color:#bbb;
+  cursor:default;
+}
 .matchCell{
   background:#fff6f6;
   cursor:pointer;
   position:relative;
   font-size:24px;
-  line-height:1.2;
+  text-align:center;
   vertical-align:middle;
+  user-select:none;
 }
-.matchCell.done .resultMark{
+.matchCell.done{
+  background:#e6f6ea;
+  pointer-events:none; /* 編集不可 */
+}
+.matchCell .resultMark{
   position:absolute;
   top:3px;
   left:50%;
@@ -53,8 +61,10 @@ td.disabled{background:#f2f4f8;color:#bbb;}
   font-size:20px;
 }
 .matchCell .scoreValue{
-  display:block;
-  margin-top:18px; /* 上に勝敗マーク分スペース */
+  display:inline-block;
+  font-size:22px;
+  line-height:1.2;
+  margin-top:20px;
 }
 .rankBadge{
   font-weight:bold;color:white;padding:5px 10px;border-radius:8px;
@@ -77,7 +87,6 @@ td.disabled{background:#f2f4f8;color:#bbb;}
 .sliderWrapper{display:flex;align-items:center;gap:10px;}
 </style>
 </head>
-
 <body>
 
 <h1>🏆 BEY LEAGUE</h1>
@@ -158,8 +167,14 @@ function generateMatchTable(count){
     let row=`<tr><th>${i}</th>`;
     for(let j=1;j<=count;j++){
       if(i===j) row+=`<td class="disabled">＼</td>`;
-      else if(i<j) row+=`<td class="matchCell" onclick="openModal(${i},${j})" id="m${i}_${j}"><span class="resultMark"></span><span class="scoreValue">-</span></td>`;
-      else row+=`<td class="matchCell" id="m${i}_${j}"><span class="resultMark"></span><span class="scoreValue"></span></td>`;
+      else if(i<j) row+=`<td class="matchCell" onclick="openModal(${i},${j})" id="m${i}_${j}">
+        <span class="resultMark"></span>
+        <span class="scoreValue">-</span>
+      </td>`;
+      else row+=`<td class="matchCell" id="m${i}_${j}">
+        <span class="resultMark"></span>
+        <span class="scoreValue"></span>
+      </td>`;
     }
     row+="</tr>";
     matchTable.innerHTML+=row;
@@ -196,7 +211,10 @@ function saveScore(){
   cell.querySelector('.resultMark').innerText=mark1;
   cellRev.querySelector('.resultMark').innerText=mark2;
 
-  cell.classList.add("done"); cellRev.classList.add("done");
+  // 編集不可にして色変更
+  cell.classList.add("done");
+  cellRev.classList.add("done");
+
   scoreModal.style.display="none";
   updateRanking();
 }
