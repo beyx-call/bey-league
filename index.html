@@ -16,13 +16,7 @@ body{
   color:#333;
 }
 h1{text-align:center;font-size:28px;margin:10px 0 20px;}
-input,button,select{
-  font-size:24px;
-  height:60px;
-  margin:5px 0;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
+input,button,select{font-size:24px;height:60px;margin:5px 0;border-radius:10px;border:1px solid #ccc;}
 button{background:#2c3e50;color:white;border:none;}
 button.danger{background:#c0392b;}
 table{
@@ -45,35 +39,36 @@ td.disabled{background:#f2f4f8;color:#bbb;}
 .matchCell{
   background:#fff6f6;
   cursor:pointer;
+  position:relative;
+  font-size:24px;
+  line-height:1.2;
+  vertical-align:middle;
 }
-.matchCell.done{background:#e6f6ea;font-weight:bold;}
-.rankBadge{
+.matchCell.done .resultMark{
+  position:absolute;
+  top:3px;
+  left:50%;
+  transform:translateX(-50%);
   font-weight:bold;
-  color:white;
-  padding:5px 10px;
-  border-radius:8px;
+  font-size:20px;
+}
+.matchCell .scoreValue{
+  display:block;
+  margin-top:18px; /* 上に勝敗マーク分スペース */
+}
+.rankBadge{
+  font-weight:bold;color:white;padding:5px 10px;border-radius:8px;
 }
 .rank1{background:#d4af37;}
 .rank2{background:#b0b0b0;}
 .rank3{background:#c27c3b;}
 .rankOther{background:#6c7a89;}
 .modal{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.4);
-  justify-content:center;
-  align-items:center;
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.4);justify-content:center;align-items:center;
 }
 .modalContent{
-  background:white;
-  padding:25px;
-  width:90%;
-  border-radius:15px;
-  text-align:center;
+  background:white;padding:25px;width:90%;border-radius:15px;text-align:center;
 }
 .scoreInput{display:flex;flex-direction:column;gap:15px;margin:15px 0;}
 .scoreInput div{text-align:center;}
@@ -139,9 +134,7 @@ function initLeague(){
 }
 
 function createPlayers(count){
-  players=[];
-  matchHistory=[];
-  matchResults={};
+  players=[]; matchHistory=[]; matchResults={};
   for(let i=1;i<=count;i++){
     players.push({number:i,win:0,lose:0,scored:0,conceded:0});
   }
@@ -165,9 +158,8 @@ function generateMatchTable(count){
     let row=`<tr><th>${i}</th>`;
     for(let j=1;j<=count;j++){
       if(i===j) row+=`<td class="disabled">＼</td>`;
-      else if(i<j)
-        row+=`<td class="matchCell" onclick="openModal(${i},${j})" id="m${i}_${j}">-</td>`;
-      else row+=`<td class="matchCell" id="m${i}_${j}"></td>`;
+      else if(i<j) row+=`<td class="matchCell" onclick="openModal(${i},${j})" id="m${i}_${j}"><span class="resultMark"></span><span class="scoreValue">-</span></td>`;
+      else row+=`<td class="matchCell" id="m${i}_${j}"><span class="resultMark"></span><span class="scoreValue"></span></td>`;
     }
     row+="</tr>";
     matchTable.innerHTML+=row;
@@ -192,19 +184,19 @@ function saveScore(){
   matchResults[`m${i}_${j}`]={s1,s2};
   matchHistory.push({i:i-1,j:j-1,s1,s2,key:`m${i}_${j}`});
 
-  // 表に反映
   let cell=document.getElementById(`m${i}_${j}`);
   let cellRev=document.getElementById(`m${j}_${i}`);
-  cell.innerHTML=`${s1}-${s2}`;
-  cellRev.innerHTML=`${s2}-${s1}`;
-  
+  cell.querySelector('.scoreValue').innerText=`${s1}-${s2}`;
+  cellRev.querySelector('.scoreValue').innerText=`${s2}-${s1}`;
+
   // 勝敗マーク
-  if(s1>s2){cell.innerHTML+=' ○'; cellRev.innerHTML+=' ×';}
-  else if(s2>s1){cell.innerHTML+=' ×'; cellRev.innerHTML+=' ○';}
+  let mark1='', mark2='';
+  if(s1>s2){mark1='○'; mark2='×';}
+  else if(s2>s1){mark1='×'; mark2='○';}
+  cell.querySelector('.resultMark').innerText=mark1;
+  cellRev.querySelector('.resultMark').innerText=mark2;
 
-  cell.classList.add("done");
-  cellRev.classList.add("done");
-
+  cell.classList.add("done"); cellRev.classList.add("done");
   scoreModal.style.display="none";
   updateRanking();
 }
@@ -230,8 +222,11 @@ function undoMatch(){
   matchResults[last.key]=null;
   let cell=document.getElementById(last.key);
   let cellRev=document.getElementById(`m${last.j+1}_${last.i+1}`);
-  cell.innerHTML="-"; cell.classList.remove("done");
-  cellRev.innerHTML=""; cellRev.classList.remove("done");
+  cell.querySelector('.scoreValue').innerText='-';
+  cell.querySelector('.resultMark').innerText='';
+  cellRev.querySelector('.scoreValue').innerText='';
+  cellRev.querySelector('.resultMark').innerText='';
+  cell.classList.remove("done"); cellRev.classList.remove("done");
   updateRanking();
 }
 
