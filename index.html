@@ -87,7 +87,7 @@ border-radius:8px;
 
 .rank1{background:#d4af37;}
 .rank2{background:#b0b0b0;}
-.rank3{background:#c27c3b;}
+rank3{background:#c27c3b;}
 .rankOther{background:#6c7a89;}
 
 .modal{
@@ -194,7 +194,7 @@ players=[];
 matchHistory=[];
 matchResults={};
 for(let i=1;i<=count;i++){
-players.push({number:i,win:0,draw:0,lose:0,scored:0,conceded:0});
+players.push({number:i,win:0,lose:0,scored:0,conceded:0});
 }
 }
 
@@ -215,10 +215,10 @@ matchTable.innerHTML+=header;
 for(let i=1;i<=count;i++){
 let row=`<tr><th>${i}</th>`;
 for(let j=1;j<=count;j++){
-if(i===j)row+=`<td class="disabled">×</td>`;
+if(i===j)row+=`<td class="disabled">＼</td>`;
 else if(i<j)
 row+=`<td class="matchCell" onclick="openModal(${i},${j})" id="m${i}_${j}">-</td>`;
-else row+=`<td></td>`;
+else row+=`<td class="matchCell" id="m${i}_${j}">-</td>`; 
 }
 row+="</tr>";
 matchTable.innerHTML+=row;
@@ -242,19 +242,32 @@ let s1=parseInt(score1.value);
 let s2=parseInt(score2.value);
 if(isNaN(s1)||isNaN(s2)){alert("数字で入力してね");return;}
 
-if(matchResults[`m${i}_${j}`]){
-reverseMatch(i-1,j-1,matchResults[`m${i}_${j}`].s1,matchResults[`m${i}_${j}`].s2);
-}
+// 反対側セルも自動反映
+let cellTop=document.getElementById(`m${i}_${j}`);
+let cellBottom=document.getElementById(`m${j}_${i}`);
+cellTop.innerHTML=`${s1}-${s2}`;
+cellBottom.innerHTML=`${s2}-${s1}`;
 
-applyMatch(i-1,j-1,s1,s2);
+// 勝敗マークを表示
+if(s1>s2){cellTop.innerHTML+=` ○`; cellBottom.innerHTML+=` ×`; players[i-1].win++; players[j-1].lose++;}
+else if(s2>s1){cellTop.innerHTML+=` ×`; cellBottom.innerHTML+=` ○`; players[j-1].win++; players[i-1].lose++;}
+else{players[i-1].draw++; players[j-1].draw++;} // 今回引き分けはなしなので不要かも
+
+// 保存履歴
 matchResults[`m${i}_${j}`]={s1,s2};
 matchHistory.push({i:i-1,j:j-1,s1,s2,key:`m${i}_${j}`});
 
-let cell=document.getElementById(`m${i}_${j}`);
-cell.innerHTML=`${s1}-${s2}`;
-cell.classList.add("done");
-
 scoreModal.style.display="none";
+updateRanking();
+}
+
+function undoMatch(){
+if(matchHistory.length===0){alert("取り消せる試合がないよ");return;}
+let last=matchHistory.pop();
+reverseMatch(last.i,last.j,last.s1,last.s2);
+matchResults[last.key]=null;
+document.getElementById(last.key).innerHTML="-";
+document.getElementById(`m${last.j+1}_${last.i+1}`).innerHTML="-";
 updateRanking();
 }
 
@@ -263,10 +276,6 @@ players[i1].scored+=s1;
 players[i1].conceded+=s2;
 players[i2].scored+=s2;
 players[i2].conceded+=s1;
-
-if(s1>s2){players[i1].win++;players[i2].lose++;}
-else if(s2>s1){players[i2].win++;players[i1].lose++;}
-else{players[i1].draw++;players[i2].draw++;}
 }
 
 function reverseMatch(i1,i2,s1,s2){
@@ -274,27 +283,14 @@ players[i1].scored-=s1;
 players[i1].conceded-=s2;
 players[i2].scored-=s2;
 players[i2].conceded-=s1;
-
-if(s1>s2){players[i1].win--;players[i2].lose--;}
-else if(s2>s1){players[i2].win--;players[i1].lose--;}
-else{players[i1].draw--;players[i2].draw--;}
-}
-
-function undoMatch(){
-if(matchHistory.length===0){alert("取り消せる試合がないよ");return;}
-let last=matchHistory.pop();
-reverseMatch(last.i,last.j,last.s1,last.s2);
-matchResults[last.key]=null;
-let cell=document.getElementById(last.key);
-cell.innerHTML="-";
-cell.classList.remove("done");
-updateRanking();
+if(s1>s2){players[i1].win--; players[i2].lose--;}
+else if(s2>s1){players[i2].win--; players[i1].lose--;}
 }
 
 function updateRanking(){
 ranking.innerHTML=`<tr>
 <th>順位</th><th>番号</th>
-<th>勝</th><th>分</th><th>負</th>
+<th>勝</th><th>負</th>
 <th>得点</th><th>失点</th><th>差</th>
 </tr>`;
 
@@ -303,7 +299,7 @@ if(b.win!==a.win)return b.win-a.win;
 let diffA=a.scored-a.conceded;
 let diffB=b.scored-b.conceded;
 if(diffB!==diffA)return diffB-diffA;
-return b.draw-a.draw;
+return 0;
 });
 
 sorted.forEach((p,i)=>{
@@ -317,7 +313,6 @@ ranking.innerHTML+=`
 <td><span class="rankBadge ${rankClass}">${i+1}</span></td>
 <td>${p.number}</td>
 <td>${p.win}</td>
-<td>${p.draw}</td>
 <td>${p.lose}</td>
 <td>${p.scored}</td>
 <td>${p.conceded}</td>
