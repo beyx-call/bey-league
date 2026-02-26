@@ -109,6 +109,28 @@ width:90%;
 border-radius:15px;
 text-align:center;
 }
+
+.scoreInput{
+display:flex;
+justify-content:space-between;
+gap:10px;
+margin:15px 0;
+}
+
+.scoreInput div{
+flex:1;
+text-align:center;
+}
+.scoreInput label{
+display:block;
+margin-bottom:5px;
+font-size:18px;
+}
+.scoreInput input{
+width:100%;
+height:55px;
+font-size:24px;
+}
 </style>
 </head>
 
@@ -134,8 +156,16 @@ text-align:center;
 <div class="modal" id="scoreModal">
 <div class="modalContent">
 <h2 id="matchTitle"></h2>
-<input type="number" id="score1" placeholder="左の得点">
-<input type="number" id="score2" placeholder="右の得点">
+<div class="scoreInput">
+  <div>
+    <label id="scoreLabel1">-番</label>
+    <input type="number" id="score1" placeholder="得点">
+  </div>
+  <div>
+    <label id="scoreLabel2">-番</label>
+    <input type="number" id="score2" placeholder="得点">
+  </div>
+</div>
 <button onclick="saveScore()">保存</button>
 </div>
 </div>
@@ -199,6 +229,8 @@ matchTable.innerHTML+=row;
 function openModal(i,j){
 currentMatch={i,j};
 matchTitle.innerText=`${i} vs ${j}`;
+scoreLabel1.innerText=`${i}番`;
+scoreLabel2.innerText=`${j}番`;
 score1.value="";
 score2.value="";
 scoreModal.style.display="flex";
