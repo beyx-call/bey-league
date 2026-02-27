@@ -5,178 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🏆 BEY LEAGUE</title>
 <style>
-body{
-  font-family:sans-serif;
-  margin:0;
-  padding:20px;
-  background:#f4f6fa;
-}
-
+/* ====== 見た目は一切変更なし ====== */
+body{font-family:sans-serif;margin:0;padding:20px;background:#f4f6fa;}
 h1{text-align:center;}
-
-/* ===== コントロールエリアに意味を持たせる ===== */
-.controlBar{
-  display:flex;
-  align-items:center;
-  gap:15px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
-}
-
-.controlLeft{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.controlRight{
-  margin-left:auto;
-}
-
-/* ボタン共通 */
-button{
-  font-size:20px;
-  padding:10px 20px;
-  border:none;
-  border-radius:10px;
-  color:white;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.startBtn{
-  background:#2c3e50;
-}
-
-.startBtn:hover{
-  background:#1f2c38;
-}
-
-.resetBtn{
-  background:#c0392b;
-}
-
-.resetBtn:hover{
-  background:#962d22;
-}
-
-/* 保存ボタンを数％濃く */
-.saveBtn{
-  background:#1f2c38;
-}
-
-.saveBtn:hover{
-  background:#16202a;
-}
-
-table{
-  border-collapse:collapse;
-  margin-top:20px;
-  background:white;
-}
-
-th,td{
-  border:1px solid #ccc;
-  width:90px;
-  height:60px;
-  text-align:center;
-  vertical-align:middle;
-  font-size:18px;
-}
-
-th{
-  background:#eef2f7;
-}
-
-.disabled{
-  background:#f0f0f0;
-  color:#bbb;
-}
-
-.matchCell{
-  cursor:pointer;
-  background:#fff8f8;
-  white-space:nowrap;
-  font-weight:bold;
-}
-
-.matchCell.done{
-  background:#dff5e4;
-  cursor:default;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.4);
-  justify-content:center;
-  align-items:center;
-}
-
-.modalContent{
-  background:white;
-  padding:20px;
-  border-radius:10px;
-  text-align:center;
-  width:300px;
-}
-
-input{
-  width:80px;
-  height:40px;
-  font-size:20px;
-  text-align:center;
-  margin:10px;
-}
-
-/* ===== 順位表 ===== */
-
-.rankingTitle{
-  margin-top:50px;
-  font-size:24px;
-  font-weight:bold;
-  text-align:center;
-}
-
-.rankingTable{
-  width:100%;
-  margin-top:15px;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 4px 14px rgba(0,0,0,0.08);
-}
-
-.rankingTable th{
-  background:#2c3e50;
-  color:white;
-  font-weight:normal;
-}
-
-.rankingTable tr:nth-child(even){
-  background:#f8fafc;
-}
-
-.first{ background:#fff8dc !important; }
-.second{ background:#eef3ff !important; }
-.third{ background:#fff1e6 !important; }
-
-.badge{
-  font-size:20px;
-}
-
-.diffPlus{
-  color:#1e8e3e;
-  font-weight:bold;
-}
-
-.diffMinus{
-  color:#d93025;
-  font-weight:bold;
-}
+.controlBar{display:flex;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:10px;}
+.controlLeft{display:flex;align-items:center;gap:10px;}
+.controlRight{margin-left:auto;}
+button{font-size:20px;padding:10px 20px;border:none;border-radius:10px;color:white;cursor:pointer;transition:0.2s;}
+.startBtn{background:#2c3e50;}
+.startBtn:hover{background:#1f2c38;}
+.resetBtn{background:#c0392b;}
+.resetBtn:hover{background:#962d22;}
+.saveBtn{background:#1f2c38;}
+.saveBtn:hover{background:#16202a;}
+table{border-collapse:collapse;margin-top:20px;background:white;}
+th,td{border:1px solid #ccc;width:90px;height:60px;text-align:center;vertical-align:middle;font-size:18px;}
+th{background:#eef2f7;}
+.disabled{background:#f0f0f0;color:#bbb;}
+.matchCell{cursor:pointer;background:#fff8f8;white-space:nowrap;font-weight:bold;}
+.matchCell.done{background:#dff5e4;cursor:pointer;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);justify-content:center;align-items:center;}
+.modalContent{background:white;padding:20px;border-radius:10px;text-align:center;width:300px;}
+input{width:80px;height:40px;font-size:20px;text-align:center;margin:10px;}
+.rankingTitle{margin-top:50px;font-size:24px;font-weight:bold;text-align:center;}
+.rankingTable{width:100%;margin-top:15px;border-radius:12px;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.08);}
+.rankingTable th{background:#2c3e50;color:white;font-weight:normal;}
+.rankingTable tr:nth-child(even){background:#f8fafc;}
+.first{background:#fff8dc !important;}
+.second{background:#eef3ff !important;}
+.third{background:#fff1e6 !important;}
+.badge{font-size:20px;}
+.diffPlus{color:#1e8e3e;font-weight:bold;}
+.diffMinus{color:#d93025;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -189,7 +49,6 @@ input{
     <input type="number" id="playerCount" value="4" min="2" max="8">
     <button class="startBtn" onclick="init()">開始</button>
   </div>
-
   <div class="controlRight">
     <button class="resetBtn" onclick="resetLeague()">リセット</button>
   </div>
@@ -200,35 +59,28 @@ input{
 <div class="modal" id="modal">
 <div class="modalContent">
 <h3 id="title"></h3>
-<input type="number" id="s1">
--
+<input type="number" id="s1"> -
 <input type="number" id="s2"><br>
 <button class="saveBtn" onclick="save()">保存</button>
 </div>
 </div>
 
 <script>
-/* ここから下は一切変更なし */
 let players=[];
+let matches={};   // ← 追加：試合記録保存
 let currentMatch=null;
 
 function init(){
   let n=parseInt(playerCount.value);
   players=[];
+  matches={};
 
   for(let i=1;i<=n;i++){
-    players.push({
-      win:0,
-      lose:0,
-      scored:0,
-      conceded:0
-    });
+    players.push({win:0,lose:0,scored:0,conceded:0});
   }
 
   let html="<table><tr><th></th>";
-  for(let i=1;i<=n;i++){
-    html+="<th>"+i+"</th>";
-  }
+  for(let i=1;i<=n;i++){ html+="<th>"+i+"</th>"; }
   html+="</tr>";
 
   for(let i=1;i<=n;i++){
@@ -236,31 +88,46 @@ function init(){
     for(let j=1;j<=n;j++){
       if(i===j){
         html+='<td class="disabled">＼</td>';
-      }
-      else if(i<j){
+      }else if(i<j){
         html+='<td class="matchCell" id="m'+i+'_'+j+'" onclick="openMatch('+i+','+j+')">-</td>';
-      }
-      else{
+      }else{
         html+='<td class="disabled" id="m'+i+'_'+j+'"></td>';
       }
     }
     html+="</tr>";
   }
 
-  html+="</table>";
-  html+='<div id="rankingArea"></div>';
-
+  html+="</table><div id='rankingArea'></div>";
   area.innerHTML=html;
-
   updateRanking();
 }
 
 function openMatch(i,j){
   currentMatch={i,j};
   title.innerText=i+" vs "+j;
-  s1.value="";
-  s2.value="";
+
+  let key=i+"_"+j;
+  if(matches[key]){
+    s1.value=matches[key].a;
+    s2.value=matches[key].b;
+  }else{
+    s1.value="";
+    s2.value="";
+  }
+
   modal.style.display="flex";
+}
+
+function applyScore(i,j,a,b,add=true){
+  let sign=add?1:-1;
+
+  if(a>b){ players[i-1].win+=sign; players[j-1].lose+=sign; }
+  else if(b>a){ players[j-1].win+=sign; players[i-1].lose+=sign; }
+
+  players[i-1].scored+=a*sign;
+  players[i-1].conceded+=b*sign;
+  players[j-1].scored+=b*sign;
+  players[j-1].conceded+=a*sign;
 }
 
 function save(){
@@ -268,40 +135,27 @@ function save(){
   let j=currentMatch.j;
   let a=parseInt(s1.value);
   let b=parseInt(s2.value);
-
   if(isNaN(a)||isNaN(b)){alert("数字入れて");return;}
 
-  let mark="";
-  if(a>b){
-    mark="○";
-    players[i-1].win++;
-    players[j-1].lose++;
-  }
-  else if(b>a){
-    mark="×";
-    players[j-1].win++;
-    players[i-1].lose++;
-  }
-  else{
-    mark="△";
+  let key=i+"_"+j;
+
+  // 以前の結果を取り消す
+  if(matches[key]){
+    applyScore(i,j,matches[key].a,matches[key].b,false);
   }
 
-  players[i-1].scored += a;
-  players[i-1].conceded += b;
-  players[j-1].scored += b;
-  players[j-1].conceded += a;
+  // 新しい結果を反映
+  applyScore(i,j,a,b,true);
+  matches[key]={a,b};
 
+  let mark=a>b?"○":b>a?"×":"△";
   let cell=document.getElementById("m"+i+"_"+j);
   cell.innerText=mark+" "+a+"-"+b;
   cell.classList.add("done");
-  cell.onclick=null;
 
   let rev=document.getElementById("m"+j+"_"+i);
   if(rev){
-    let revMark="";
-    if(a>b) revMark="×";
-    else if(b>a) revMark="○";
-    else revMark="△";
+    let revMark=a>b?"×":b>a?"○":"△";
     rev.innerText=revMark+" "+b+"-"+a;
   }
 
@@ -311,11 +165,8 @@ function save(){
 
 function updateRanking(){
   let ranking=[...players].map((p,index)=>({
-    num:index+1,
-    win:p.win,
-    lose:p.lose,
-    scored:p.scored,
-    conceded:p.conceded,
+    num:index+1,win:p.win,lose:p.lose,
+    scored:p.scored,conceded:p.conceded,
     diff:p.scored-p.conceded
   }));
 
@@ -330,15 +181,9 @@ function updateRanking(){
   html+="<tr><th>順位</th><th>番号</th><th>勝</th><th>負</th><th>得点</th><th>失点</th><th>得失点差</th></tr>";
 
   ranking.forEach((p,i)=>{
-    let rowClass="";
-    let badge="";
-    if(i===0){ rowClass="first"; badge="🥇 "; }
-    else if(i===1){ rowClass="second"; badge="🥈 "; }
-    else if(i===2){ rowClass="third"; badge="🥉 "; }
-
-    let diffClass="";
-    if(p.diff>0) diffClass="diffPlus";
-    if(p.diff<0) diffClass="diffMinus";
+    let rowClass=i===0?"first":i===1?"second":i===2?"third":"";
+    let badge=i===0?"🥇 ":i===1?"🥈 ":i===2?"🥉 ":"";
+    let diffClass=p.diff>0?"diffPlus":p.diff<0?"diffMinus":"";
 
     html+='<tr class="'+rowClass+'">';
     html+="<td class='badge'>"+badge+(i+1)+"</td>";
@@ -347,12 +192,11 @@ function updateRanking(){
     html+="<td>"+p.lose+"</td>";
     html+="<td>"+p.scored+"</td>";
     html+="<td>"+p.conceded+"</td>";
-    html+='<td class="'+diffClass+'">'+p.diff+"</td>";
-    html+="</tr>";
+    html+='<td class="'+diffClass+'">'+p.diff+"</td></tr>";
   });
 
   html+="</table>";
-  document.getElementById("rankingArea").innerHTML=html;
+  rankingArea.innerHTML=html;
 }
 
 function resetLeague(){
@@ -360,6 +204,5 @@ function resetLeague(){
   init();
 }
 </script>
-
 </body>
 </html>
